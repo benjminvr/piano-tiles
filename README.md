@@ -34,7 +34,7 @@ piano_tiles/
 
 ##  Arquitectura en Capas
 
-- **Capa de Presentación (`presentation/`)**  
+- **Capa de Presentación (`presentation/`)**  David, rodrigo, antonio 
   - Interfaz con el usuario: dibuja la pantalla, captura teclas.  
   - Nunca contiene reglas de negocio, solo interacción gráfica.  
 
