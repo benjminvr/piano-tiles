@@ -5,6 +5,32 @@ La solución se estructura con una **arquitectura en capas** y sigue una **topol
 
 ---
 
+## How to run the game?
+1. Create a virtual environment
+```bash
+python -m venv venv
+```
+
+2. Activate virtual environment
+- Windows (PowerShell):
+```bash
+venv/Scripts/Activate.ps1
+```
+- MacOS:
+```bash
+source venv/bin/activate
+```
+
+3. Install dependencies
+```bash
+pip install -r requirements.txt
+```
+
+4. Run game
+```bash
+python src/main.py
+```
+
 ## Estructura del Proyecto
 
 ```plaintext
