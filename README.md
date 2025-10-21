@@ -62,6 +62,6 @@ En este proyecto se identificó un **líder de equipo** y cada integrante tiene 
 | Benjamin Vergara        | **Líder del proyecto**: coordinación general, revisiones y entregas | Global |
 | David Hernandez / Antonio Pelayo / Rodrigo Leon  | Desarrollo de la interfaz (UI y control de entrada) | Presentation |
 | [Nombre integrante 2]      | Implementación de casos de uso y lógica de orquestación | Application |
-| [Nombre integrante 3]      | Definición de entidades y reglas del negocio (tiles, puntuación) | Domain |
+| [daniel]      | Definición de entidades y reglas del negocio (tiles, puntuación) | Domain |
 | [Nombre integrante 4]      | Adaptadores: leaderboard local/API, audio, reloj | Infrastructure |
 | [Nombre integrante 5]      | Implementación y despliegue del servidor FastAPI/Flask | Server |
