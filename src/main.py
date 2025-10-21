@@ -21,7 +21,7 @@ TILE_WIDTH = WIDTH // 4
 TILE_HEIGHT = 150
 TILE_SPEED = 4
 SPEED_INCREMENT = 0.5  # Speed increase over time
-SPAWN_INTERVAL = 800    # milliseconds between new rows
+BASE_SPAWN_INTERVAL = 800
 
 # Game state
 clock = pygame.time.Clock()
@@ -99,7 +99,8 @@ while running:
         continue
 
     # Spawn new tiles periodically
-    if current_time - last_spawn_time > SPAWN_INTERVAL:
+    spawn_interval = BASE_SPAWN_INTERVAL * (TILE_SPEED / speed)
+    if current_time - last_spawn_time > spawn_interval:
         spawn_row()
         last_spawn_time = current_time
         # Gradually increase falling speed
