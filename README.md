@@ -64,4 +64,4 @@ En este proyecto se identificó un **líder de equipo** y cada integrante tiene 
 | [Nombre integrante 2]      | Implementación de casos de uso y lógica de orquestación | Application |
 | [daniel]      | Definición de entidades y reglas del negocio (tiles, puntuación) | Domain |
 | [Nombre integrante 4]      | Adaptadores: leaderboard local/API, audio, reloj | Infrastructure |
-| [Nombre integrante 5]      | Implementación y despliegue del servidor FastAPI/Flask | Server |
+| Luis Acosta / Benjamin Vergara      | Implementación y despliegue del servidor FastAPI/Flask | Server |
