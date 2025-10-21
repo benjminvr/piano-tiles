@@ -62,6 +62,33 @@ En este proyecto se identificó un **líder de equipo** y cada integrante tiene 
 | Benjamin Vergara        | **Líder del proyecto**: coordinación general, revisiones y entregas | Global |
 | David Hernandez / Antonio Pelayo / Rodrigo Leon  | Desarrollo de la interfaz (UI y control de entrada) | Presentation |
 | [Nombre integrante 2]      | Implementación de casos de uso y lógica de orquestación | Application |
-| daniel, Santiago      | Definición de entidades y reglas del negocio (tiles, puntuación) | Domain |
-| [Nombre integrante 4]      | Adaptadores: leaderboard local/API, audio, reloj | Infrastructure |
+| Daniel Hernandez, Santiago Ortiz     | Definición de entidades y reglas del negocio (tiles, puntuación) | Domain |
+| Benjamin Vergara    | Adaptadores: leaderboard local/API, audio, reloj | Infrastructure |
 | Luis Acosta / Benjamin Vergara      | Implementación y despliegue del servidor FastAPI/Flask | Server |
+
+## Git flow
+
+Para organizar el trabajo en equipo se recomienda usar **ramas de Git** asociadas a capas o funcionalidades específicas.  
+De esta manera, cada integrante puede trabajar de forma independiente sin afectar el código principal hasta que su trabajo esté revisado e integrado.
+
+### Convenciones de ramas
+- `feature/ui` → Desarrollo de la capa de presentación (interfaz con Pygame, control de entrada).  
+- `feature/game-logic` → Lógica central y servicios de la capa de dominio.  
+- `feature/application` → Casos de uso y orquestación de la lógica.  
+- `feature/infrastructure` → Adaptadores: leaderboard local/API, audio, reloj.  
+- `feature/server` → Backend (FastAPI/Flask, repositorios y endpoints).  
+
+### Ejemplo de flujo de trabajo
+```bash
+# Crear una rama nueva para trabajar en la UI
+git checkout -b feature/ui
+
+# Hacer cambios, agregar y confirmar
+git add .
+git commit -m "Implementa pantalla inicial en Pygame"
+
+# Subir la rama al repositorio remoto
+git push origin feature/ui
+
+# Cuando esté listo → crear un Pull Request para revisión
+
