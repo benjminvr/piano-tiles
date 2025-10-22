@@ -1,8 +1,8 @@
 # app.py
 import pygame
 import sys
-from src.domain.entities import Board, GameState
-from src.domain.services import spawn_row, update_board, process_click, check_missed_tiles
+from domain.entities import Board, GameState
+from domain.services import spawn_row, update_board, process_click, check_missed_tiles
 
 # --- Configuración general ---
 WIDTH, HEIGHT = 400, 600
