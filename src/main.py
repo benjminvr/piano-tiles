@@ -2,28 +2,23 @@ import pygame
 import random
 import sys
 
-# Initialize pygame
 pygame.init()
 
-# Screen setup
 WIDTH, HEIGHT = 400, 600
 SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Piano Tiles (Simple Version)")
 
-# Colors
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 GRAY = (180, 180, 180)
 RED = (255, 50, 50)
 
-# Tile settings
 TILE_WIDTH = WIDTH // 4
 TILE_HEIGHT = 150
 TILE_SPEED = 4
-SPEED_INCREMENT = 0.5  # Speed increase over time
+SPEED_INCREMENT = 0.5
 BASE_SPAWN_INTERVAL = 800
 
-# Game state
 clock = pygame.time.Clock()
 tiles = []
 last_spawn_time = 0
@@ -45,10 +40,9 @@ def draw_tiles():
     """Draw all tiles on screen."""
     for tile in tiles:
         pygame.draw.rect(SCREEN, tile["color"], tile["rect"])
-        pygame.draw.rect(SCREEN, GRAY, tile["rect"], 1)  # borders
+        pygame.draw.rect(SCREEN, GRAY, tile["rect"], 1)
 
 def reset_game():
-    """Reset game state."""
     global tiles, score, speed, game_over, last_spawn_time
     tiles.clear()
     score = 0
@@ -57,10 +51,8 @@ def reset_game():
     last_spawn_time = pygame.time.get_ticks()
     spawn_row()
 
-# Start with one row
 reset_game()
 
-# Main game loop
 while running:
     SCREEN.fill(WHITE)
     current_time = pygame.time.get_ticks()
@@ -83,7 +75,7 @@ while running:
                         tile["color"] = GRAY
                         tile["clicked"] = True
                         score += 1
-                        # Slightly increase speed as player succeeds
+
                         speed += SPEED_INCREMENT / 10
                     else:
                         game_over = True
@@ -98,28 +90,23 @@ while running:
         clock.tick(60)
         continue
 
-    # Spawn new tiles periodically
     spawn_interval = BASE_SPAWN_INTERVAL * (TILE_SPEED / speed)
     if current_time - last_spawn_time > spawn_interval:
         spawn_row()
         last_spawn_time = current_time
-        # Gradually increase falling speed
+
         speed += SPEED_INCREMENT
 
-    # Move tiles downward
     for tile in tiles:
         tile["rect"].y += speed
 
-    # Check if a black tile reached bottom unclicked -> game over
     for tile in tiles:
         if tile["rect"].bottom >= HEIGHT and tile["color"] == BLACK and not tile["clicked"]:
             game_over = True
             break
 
-    # Remove off-screen tiles
     tiles = [t for t in tiles if t["rect"].top < HEIGHT]
 
-    # Draw tiles and score
     draw_tiles()
     score_text = font.render(f"Score: {score}", True, BLACK)
     SCREEN.blit(score_text, (10, 10))
