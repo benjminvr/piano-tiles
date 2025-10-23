@@ -28,7 +28,7 @@ pip install -r requirements.txt
 
 4. Run game
 ```bash
-python src/main.py
+python src/app.py
 ```
 
 ## Estructura del Proyecto
@@ -49,13 +49,12 @@ piano_tiles/
 │   │   ├── services.py              # Generación de tiles, validación de jugadas
 │   │   └── ports.py                 # Interfaces
 │   └── infrastructure/              
-│       ├── leaderboard_api.py       # Cliente HTTP para Leaderboard remoto
-│       ├── leaderboard_local.py     # Persistencia local alternativa (JSON/SQLite)
-│       ├── pygame_audio.py          # Implementación de AudioPort
-│       └── system_clock.py          # Implementación de ClockPort
-└── server/
-    ├── main.py                      # Servidor FastAPI/Flask (leaderboards)
-    └── repositories.py              # Repositorios en memoria o SQLite
+│       ├── leaderboard_adapter.py           # Cliente HTTP para Leaderboard remoto
+│       ├── leaderboard_local.py             # Persistencia local alternativa (JSON/SQLite)
+│       ├── pygame_audio_adapter.py          # Implementación de AudioPort
+│       ├── pygame_audio.py
+│       ├── system_clock_adapter.py          
+│       └── system_clock.py                  # Implementación de ClockPort
 ```
 
 ##  Arquitectura en Capas
@@ -73,11 +72,9 @@ piano_tiles/
   - Independiente de librerías externas (testable sin Pygame ni HTTP).  
 
 - **Capa de Infraestructura (`infrastructure/`)**  
-  - Adaptadores concretos a puertos (Pygame, API REST, JSON, etc.).  
+  - Adaptadores concretos.  
 
-- **Servidor (`server/`)**  
-  - Exposición REST del leaderboard.  
-  - Implementación sencilla para pruebas y despliegue local.
+ ![alt text](https://i.ibb.co/GfyMK171/Screenshot-2025-10-23-at-10-36-16-a-m.png)
  
  ## Equipo y Roles
 
@@ -89,8 +86,8 @@ En este proyecto se identificó un **líder de equipo** y cada integrante tiene 
 | David Hernandez / Antonio Pelayo / Rodrigo Leon  | Desarrollo de la interfaz (UI y control de entrada) | Presentation |
 | Rodrigo López    | Implementación de casos de uso y lógica de orquestación | Application |
 | Daniel Hernandez, Santiago Oseguera     | Definición de entidades y reglas del negocio (tiles, puntuación) | Domain |
-| Benjamin Vergara    | Adaptadores: leaderboard local/API, audio, reloj | Infrastructure |
-| Luis Acosta / Benjamin Vergara      | Implementación y despliegue del servidor FastAPI/Flask | Server |
+| Benjamin Vergara / Luis Acosta   | Adaptadores: leaderboard local/API, audio, reloj | Infrastructure ||
+
 
 ## Git flow
 
@@ -102,7 +99,6 @@ De esta manera, cada integrante puede trabajar de forma independiente sin afecta
 - `feature/game-logic` → Lógica central y servicios de la capa de dominio.  
 - `feature/application` → Casos de uso y orquestación de la lógica.  
 - `feature/infrastructure` → Adaptadores: leaderboard local/API, audio, reloj.  
-- `feature/server` → Backend (FastAPI/Flask, repositorios y endpoints).  
 
 ### Ejemplo de flujo de trabajo
 ```bash
