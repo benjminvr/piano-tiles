@@ -87,6 +87,7 @@ En este proyecto se identificó un **líder de equipo** y cada integrante tiene 
 | Rodrigo López, Carlos Felix    | Implementación de casos de uso y lógica de orquestación | Application |
 | Daniel Hernandez, Santiago Oseguera     | Definición de entidades y reglas del negocio (tiles, puntuación) | Domain |
 | Benjamin Vergara / Luis Acosta   | Adaptadores: leaderboard local/API, audio, reloj | Infrastructure ||
+| Luis Antonio Cuaquentzi Avendaño | Desarrollo de un MVP del juego | General |
 
 
 ## Git flow
