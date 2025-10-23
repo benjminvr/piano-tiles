@@ -4,7 +4,8 @@ import random
 
 from src.presentation.game_view import GameView, Color
 from src.presentation.input_controller import InputController, GameAction
-from src.infrastructure.pygame_audio import PygameAudio, PRESET_SEQUENCES
+from src.infrastructure import PygameAudioAdapter, SystemClockAdapter, LeaderboardAdapter
+from src.application import StartGameUseCase, UpdateGameUseCase, SubmitScoreUseCase
 
 from audio_config import get_active_notes, get_active_song_info
 
@@ -13,18 +14,37 @@ class PianoTilesApp:
         self.WIDTH = 400
         self.HEIGHT = 600
 
-        self.view = GameView(self.WIDTH, self.HEIGHT)
-        self.input_controller = InputController()
-        self.clock = self.view.get_clock()
-
+        # Initialize infrastructure adapters
+        self.clock_adapter = SystemClockAdapter()
+        self.leaderboard_adapter = LeaderboardAdapter()
+        
+        # Initialize audio adapter
         try:
             notes = get_active_notes()
             song_info = get_active_song_info()
-            self.audio = PygameAudio(note_sequence=notes)
+            self.audio_adapter = PygameAudioAdapter(note_sequence=notes)
             self.audio_enabled = True
         except Exception as e:
-            self.audio = None
+            self.audio_adapter = None
             self.audio_enabled = False
+        
+        # Initialize use cases with dependency injection
+        self.start_game_use_case = StartGameUseCase(
+            audio_port=self.audio_adapter,
+            clock_port=self.clock_adapter,
+            leaderboard_port=self.leaderboard_adapter
+        )
+        self.update_game_use_case = UpdateGameUseCase(
+            audio_port=self.audio_adapter,
+            clock_port=self.clock_adapter
+        )
+        self.submit_score_use_case = SubmitScoreUseCase(
+            leaderboard_port=self.leaderboard_adapter
+        )
+        
+        self.view = GameView(self.WIDTH, self.HEIGHT)
+        self.input_controller = InputController()
+        self.clock = self.view.get_clock()
 
         self.game_state = "MENU"
         self.running = True
@@ -117,11 +137,11 @@ class PianoTilesApp:
                 clicked_tile['color'] = Color.GRAY
                 self.score += 1
 
-                if self.audio_enabled and self.audio:
-                    self.audio.play_note_for_column(column)
+                if self.audio_enabled and self.audio_adapter:
+                    self.audio_adapter.play_note_for_column(column)
             else:
-                if self.audio_enabled and self.audio:
-                    self.audio.play_error_sound()
+                if self.audio_enabled and self.audio_adapter:
+                    self.audio_adapter.play_error_sound()
                 self._game_over()
 
     def _spawn_row(self):
@@ -144,11 +164,16 @@ class PianoTilesApp:
     def _game_over(self):
         self.game_state = "GAME_OVER"
 
-        if self.audio_enabled and self.audio:
-            self.audio.play_game_over_sound()
+        if self.audio_enabled and self.audio_adapter:
+            self.audio_adapter.play_game_over_sound()
 
         if self.score > self.high_score:
             self.high_score = self.score
+        
+        # Save score to leaderboard (only if score > 0)
+        if self.score > 0:
+            player_name = "Player"  # You can modify this to get player name from input
+            self.submit_score_use_case.execute(player_name, self.score)
 
     def _render(self):
         if self.game_state == "MENU":
