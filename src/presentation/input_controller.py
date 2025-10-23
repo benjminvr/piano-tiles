@@ -12,6 +12,10 @@ class GameAction(Enum):
     PAUSE = 4
     RESUME = 5
     CLICK = 6
+    MENU_UP = 7
+    MENU_DOWN = 8
+    MENU_SELECT = 9
+    BACK_TO_MENU = 10
 
 class InputController:
 
@@ -59,6 +63,18 @@ class InputController:
 
         if key == pygame.K_p:
             return (GameAction.PAUSE, None)
+
+        if key == pygame.K_UP:
+            return (GameAction.MENU_UP, None)
+
+        if key == pygame.K_DOWN:
+            return (GameAction.MENU_DOWN, None)
+
+        if key == pygame.K_RETURN:
+            return (GameAction.MENU_SELECT, None)
+
+        if key == pygame.K_m:
+            return (GameAction.BACK_TO_MENU, None)
 
         return None
 

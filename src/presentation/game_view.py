@@ -99,11 +99,53 @@ class GameView:
             self.screen.blit(high_score_text, high_score_rect)
 
         restart_text = self.font_small.render("Press R to Restart", True, self.colors.WHITE)
-        restart_rect = restart_text.get_rect(center=(self.width // 2, self.height // 2 + 60))
+        restart_rect = restart_text.get_rect(center=(self.width // 2, self.height // 2 + 50))
         self.screen.blit(restart_text, restart_rect)
 
+        menu_text = self.font_small.render("Press M for Menu", True, self.colors.WHITE)
+        menu_rect = menu_text.get_rect(center=(self.width // 2, self.height // 2 + 75))
+        self.screen.blit(menu_text, menu_rect)
+
+    def draw_victory_screen(self, score: int, song_name: str, high_score: Optional[int] = None):
+        overlay = pygame.Surface((self.width, self.height))
+        overlay.fill(self.colors.BLACK)
+        overlay.set_alpha(150)
+        self.screen.blit(overlay, (0, 0))
+
+        title = self.font_large.render("SONG COMPLETED!", True, self.colors.GREEN)
+        title_rect = title.get_rect(center=(self.width // 2, self.height // 2 - 100))
+        self.screen.blit(title, title_rect)
+
+        won_text = self.font_medium.render("🎉 YOU WON! 🎉", True, self.colors.GREEN)
+        won_rect = won_text.get_rect(center=(self.width // 2, self.height // 2 - 60))
+        self.screen.blit(won_text, won_rect)
+
+        song_text = self.font_medium.render(f"♪ {song_name}", True, self.colors.WHITE)
+        song_rect = song_text.get_rect(center=(self.width // 2, self.height // 2 - 20))
+        self.screen.blit(song_text, song_rect)
+
+        score_text = self.font_medium.render(f"Score: {score}", True, self.colors.WHITE)
+        score_rect = score_text.get_rect(center=(self.width // 2, self.height // 2 + 20))
+        self.screen.blit(score_text, score_rect)
+
+        if high_score is not None:
+            if score >= high_score:
+                high_score_text = self.font_small.render("🏆 NEW HIGH SCORE! 🏆", True, self.colors.GREEN)
+            else:
+                high_score_text = self.font_small.render(f"Best: {high_score}", True, self.colors.WHITE)
+            high_score_rect = high_score_text.get_rect(center=(self.width // 2, self.height // 2 + 50))
+            self.screen.blit(high_score_text, high_score_rect)
+
+        restart_text = self.font_small.render("Press R to Play Again", True, self.colors.WHITE)
+        restart_rect = restart_text.get_rect(center=(self.width // 2, self.height // 2 + 80))
+        self.screen.blit(restart_text, restart_rect)
+
+        menu_text = self.font_small.render("Press M for Menu", True, self.colors.WHITE)
+        menu_rect = menu_text.get_rect(center=(self.width // 2, self.height // 2 + 105))
+        self.screen.blit(menu_text, menu_rect)
+
         quit_text = self.font_small.render("Press ESC to Quit", True, self.colors.LIGHT_GRAY)
-        quit_rect = quit_text.get_rect(center=(self.width // 2, self.height // 2 + 90))
+        quit_rect = quit_text.get_rect(center=(self.width // 2, self.height // 2 + 130))
         self.screen.blit(quit_text, quit_rect)
 
     def draw_start_screen(self):
@@ -113,7 +155,7 @@ class GameView:
         title_rect = title.get_rect(center=(self.width // 2, self.height // 2 - 80))
         self.screen.blit(title, title_rect)
 
-        subtitle = self.font_small.render("Arquitectura en Capas", True, self.colors.GRAY)
+        subtitle = self.font_small.render("Song Mode", True, self.colors.GRAY)
         subtitle_rect = subtitle.get_rect(center=(self.width // 2, self.height // 2 - 40))
         self.screen.blit(subtitle, subtitle_rect)
 
@@ -133,6 +175,71 @@ class GameView:
             text = self.font_small.render(instruction, True, self.colors.WHITE)
             text_rect = text.get_rect(center=(self.width // 2, y_offset + i * 30))
             self.screen.blit(text, text_rect)
+
+    def draw_song_selection_menu(self, songs: list, selected_index: int):
+        self.clear_screen(self.colors.BLACK)
+
+        title = self.font_large.render("SELECT SONG", True, self.colors.WHITE)
+        title_rect = title.get_rect(center=(self.width // 2, 80))
+        self.screen.blit(title, title_rect)
+
+        y_start = 150
+        for i, song in enumerate(songs):
+            color = self.colors.BLUE if i == selected_index else self.colors.WHITE
+            
+            song_text = self.font_medium.render(f"{i+1}. {song['name']}", True, color)
+            song_rect = song_text.get_rect(center=(self.width // 2, y_start + i * 70))
+            self.screen.blit(song_text, song_rect)
+            
+            difficulty_text = self.font_small.render(f"[{song['difficulty']}]", True, color)
+            difficulty_rect = difficulty_text.get_rect(center=(self.width // 2, y_start + i * 70 + 25))
+            self.screen.blit(difficulty_text, difficulty_rect)
+
+        controls = self.font_small.render("↑↓: Navigate | ENTER: Select | ESC: Quit", True, self.colors.GRAY)
+        controls_rect = controls.get_rect(center=(self.width // 2, self.height - 50))
+        self.screen.blit(controls, controls_rect)
+
+    def draw_game_ui(self, score: int, song_name: str, progress: float = 0.0, speed: float = 4.0):
+        self.draw_score(score, 10, 10)
+        
+        song_text = self.font_small.render(f"♪ {song_name}", True, self.colors.BLUE)
+        self.screen.blit(song_text, (10, 45))
+        
+        speed_text = self.font_small.render(f"Speed: {speed:.1f}x", True, self.colors.RED)
+        self.screen.blit(speed_text, (10, 70))
+        
+        if progress > 0:
+            progress_bar_width = 200
+            progress_bar_height = 8
+            progress_x = self.width - progress_bar_width - 10
+            progress_y = 15
+            
+            pygame.draw.rect(self.screen, self.colors.DARK_GRAY, 
+                           (progress_x, progress_y, progress_bar_width, progress_bar_height))
+            
+            fill_width = int(progress_bar_width * min(progress, 1.0))
+            if fill_width > 0:
+                pygame.draw.rect(self.screen, self.colors.GREEN, 
+                               (progress_x, progress_y, fill_width, progress_bar_height))
+
+    def draw_countdown(self, countdown: int, song_name: str):
+        overlay = pygame.Surface((self.width, self.height))
+        overlay.fill(self.colors.BLACK)
+        overlay.set_alpha(100)
+        self.screen.blit(overlay, (0, 0))
+        
+        song_text = self.font_medium.render(f"♪ {song_name}", True, self.colors.WHITE)
+        song_rect = song_text.get_rect(center=(self.width // 2, self.height // 2 - 60))
+        self.screen.blit(song_text, song_rect)
+        
+        if countdown > 0:
+            countdown_text = self.font_large.render(str(countdown), True, self.colors.WHITE)
+            countdown_rect = countdown_text.get_rect(center=(self.width // 2, self.height // 2))
+            self.screen.blit(countdown_text, countdown_rect)
+        else:
+            start_text = self.font_large.render("GO!", True, self.colors.GREEN)
+            start_rect = start_text.get_rect(center=(self.width // 2, self.height // 2))
+            self.screen.blit(start_text, start_rect)
 
     def draw_pause_screen(self, score: int):
         overlay = pygame.Surface((self.width, self.height))
